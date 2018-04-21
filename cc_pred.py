@@ -65,4 +65,5 @@ plt.bar(range(x.shape[1]), importances[indices],
 plt.xticks(range(x.shape[1]), indices)
 plt.xlim([-1, x.shape[1]])
 plt.savefig(header[label[label_id-1]])
+print(header[label[label_id-1]])
 plt.show()
