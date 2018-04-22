@@ -1,7 +1,7 @@
 import numpy as np
 import gdal
 
-dataset = gdal.Open('nalanda_night.tif')
+dataset = gdal.Open('patna_nl.tif')
 a=np.array(dataset.ReadAsArray())
 
 lx = len(a[0])
@@ -27,30 +27,23 @@ def paint(i,j):
         b[i][j]=1
         return
 
-def paintT(i,j,T):
-    if(light(i,j)<T):
+def paintT(i,j,T,dT,id):
+    if(light(i,j)<T or b[i][j]!=0):
         return
-    if(light(i+1,j)>T and b[i+1][j]==0):
-        b[i+1][j] += light(i,j)
-        paintT(i+1,j,T)
-    if(light(i,j+1)>T and b[i][j+1]==0):
-        b[i][j+1] += light(i,j)
-        paintT(i,j+1,T)
-    if(light(i-1,j)>T and b[i-1][j]==0):
-        b[i-1][j] += light(i,j)
-        paintT(i-1,j,T)
-    if(light(i,j-1)>T and b[i][j-1]==0):
-        b[i][j-1] += light(i,j)
-        paintT(i,j-1,T)
+    b[i][j] = id
+    for di in xrange(-1,2):
+        for dj in xrange(-1,2):
+            if(abs(light(i,j) - light(i+di,j+dj))<dT):
+                paintT(i+di,j+dj,T,dT,id)
 
 for i in xrange(0,ly):
     for j in xrange(0,lx):
-        paintT(i,j,10)
+        paintT(i,j,5,1,i*ly+j)
 
-# for i in xrange(0,ly):
-#     for j in xrange(0,lx):
-#         if(b[i][j]==1):
-#             x,y = getLatLong(i,j)
-#             print '['+str(x)+','+str(y)+'],'
+for i in xrange(0,ly):
+    for j in xrange(0,lx):
+        if(b[i][j]==1):
+            x,y = getLatLong(i,j)
+            print '['+str(x)+','+str(y)+'],'
 # print(gdal.)
-print(np.max(b))
+# print(np.max(b))
