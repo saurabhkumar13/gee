@@ -22,21 +22,19 @@ fc = ee.FeatureCollection('ft:13YnFNSd-d1x6IRiirVUw8sPLZhtMRAjFTS7s1LTr','geomet
 # fc = (ee.FeatureCollection('ft:16ln9k64V3OOBHocn1LySXnYN6LwfMy8zII-CwFkw','geometry'))
 
 villages_list = fc.toList(200000).getInfo()
-for i in xrange(254,len(villages_list)):
+for i in xrange(0,len(villages_list)):
     while(1):
         # try:
         village = (ee.Feature)(villages_list[i])
-        name = str(village.get('DISTRICT').getInfo())
-        print(name)
-        if village.get('DISTRICT').getInfo() == None:
+        if village.get('PKey').getInfo() == None:
             continue
+        name = str(int(village.get('PKey').getInfo()))
+        print(name)
         im = getImageM(village.geometry())
-        # print(im)
         task_config = {
             'scale': 1000,
             'description': 'meh2',
             'driveFolder': 'ee/nlI/'
-            # 'region' : village.geometry()
         }
         # print(village.geometry())
         task = ee.batch.Export.image(im, name, task_config)
