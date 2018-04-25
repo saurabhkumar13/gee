@@ -4,7 +4,7 @@ xx = []
 x = []
 y = []
 yy = []
-with open('geo_vill.csv','rb') as f:
+with open('b_vill_stuff_EMP_Village_Level.csv','rb') as f:
     reader = csv.reader(f)
     rownum = 0
     for row in reader:
@@ -17,14 +17,14 @@ print header
 
 for i in range(len(header)):
     print(i,header[i])
-feat = [i for i in xrange(2,6)]
-label = [19,32,45,58,71,83]
+feat = [i for i in xrange(1,5)]
+label = [7]
 # #
 for i in xrange(0,len(feat)):
     print i, header[feat[i]]
 #
 for i in xrange(len(xx)):
-    if xx[i][label[0]] == '':
+    if xx[i][label[0]] == '' or xx[i][1] == '':
         continue
     xxx = []
     yyy = []
@@ -36,7 +36,7 @@ for i in xrange(len(xx)):
     yy.append(yyy)
 x = np.array(x)
 yy = np.array(yy)
-label_id = 6
+label_id = 1
 y=yy[:,label_id-1:label_id]
 y=y.reshape(len(x))
 print y.shape
