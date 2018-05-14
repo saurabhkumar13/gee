@@ -19,6 +19,7 @@ for i in range(len(header)):
     print(i,header[i])
 feat = [i for i in xrange(1,5)]
 label = [7]
+
 # #
 for i in xrange(0,len(feat)):
     print i, header[feat[i]]

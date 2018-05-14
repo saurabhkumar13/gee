@@ -16,7 +16,7 @@ def getLatLong(i, j):
 
 
 def getLatLongS(i, j):
-    return '[' + str(ulx + (lrx - ulx) * (j) / lx) + ',' + str(lry + (uly - lry) * (ly - i) / ly) + ']'
+    return str(ulx + (lrx - ulx) * (j) / lx) + ',' + str(lry + (uly - lry) * (ly - i) / ly)
 
 
 def light(i, j):
@@ -86,7 +86,7 @@ def getSpots(img_name):
     #     if value['num'] > 100:
     #         print key, value
     list_spots = sorted(list_spots, reverse=True)[:10]
-    return list_spots
+    return list_spots, clusters
     # print(list_spots)
     # plt.plot(list_spots)
     # plt.ylabel('some numbers')
@@ -104,15 +104,21 @@ from os.path import isfile, join
 
 onlyfiles = [f for f in listdir('nl') if isfile(join('nl', f))]
 f = open('spots.csv','w')
-
+f.write('PKey,SOL,geometry\n')
 for file in  onlyfiles:
-    f.write(file[:-4])
+    # f.write(file[:-4])
     print(file[:-4])
-    l = getSpots('nl/'+file)
-    for i in xrange(0,len(l)):
-        f.write(str(","+str(l[i])))
-    for i in xrange(len(l),10):
-        f.write(",0")
-    f.write("\n")
+    l, clusters = getSpots('nl/'+file)
+    # for i in xrange(0,len(l)):
+    #     f.write(str(","+str(l[i])))
+    for key, value in sorted(clusters.iteritems(), key=lambda (k,v): (v,k)):
+        if value['num'] > 10:
+            f.write(file[:-4] + ',' + str(value['num']) + ',"<Polygon><outerBoundaryIs><LinearRing><coordinates>')
+            f.write(getLatLongS(value['min_i'],value['min_j'])+' ')
+            f.write(getLatLongS(value['max_i'],value['min_j'])+' ')
+            f.write(getLatLongS(value['max_i'],value['max_j'])+' ')
+            f.write(getLatLongS(value['min_i'],value['max_j'])+' ')
+            f.write(getLatLongS(value['min_i'],value['min_j'])+' ')
+            f.write('</coordinates></LinearRing></outerBoundaryIs></Polygon>"\n')
 
 f.close()

@@ -1,0 +1,8 @@
+var fc = ee.FeatureCollection('ft:1fEggU3OzDPnb1obOO73dL82FXVrP7RrQLZ-fqed1','geometry')
+var arawal = fc.filter(ee.Filter.eq('DIST_NAME','MUNGER'))
+print(arawal)
+Map.addLayer(arawal,{},'Munger')
+var mfp = ee.FeatureCollection('ft:1PA2zwArj8EsplrX9eMxJ2H_TICyyx855KPnbJhC1','geometry')
+mfp = mfp.filter(ee.Filter.eq('name','Munger'))
+print(mfp)
+Map.addLayer(mfp,{},'district')
